@@ -1,0 +1,26 @@
+<html>
+  <head>
+  <title>Vue JS</title>
+  <link rel="stylesheet" type="text/css" href="../stylesheets/style.css">
+  <script src="../javascripts/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="demo" @click="attachRed = !attachRed" :class="{ red: attachRed }"></div>
+      <div class="demo"></div>
+      <div class="demo"></div>
+    </div>
+  </body>
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        attachRed: false,
+      },
+      methods: {
+      
+      }
+    });
+  </script>
+</html>
