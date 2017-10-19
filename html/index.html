@@ -20,7 +20,12 @@
       
       <hr>
       <h1>Object's coordinates on mousemove</h1>
-      <p v-on:mousemove="updateCoordinates"> Coordinates:  {{ x }}/{{ y }}</p>
+      <p v-on:mousemove="updateCoordinates"> Coordinates:  {{ x }}/{{ y }} -
+        <span v-on:mousemove.stop="">DEAD SPOT</span></p>
+
+      <hr>
+      <h1>Keyboard events</h1>
+      <input type="text" v-on:keyup.enter="alertMe"> 
     </div>
   </body>
     <script>
@@ -45,6 +50,9 @@
           updateCoordinates: function(event){
             this.x = event.clientX;
             this.y = event.clientY;
+          },
+          alertMe: function(e){
+            alert(e.target.value);
           }
         }
       });
