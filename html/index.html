@@ -8,8 +8,19 @@
     <div id="app">
       <h1 v-once>{{ title  }}</h1>
       <p>{{ sayHello() }} <a v-bind:href="link">Google</a></p>
+      
       <hr>
+      <h1>Append complete HTML tag</h1>
       <p v-html="finishedLink"></p>
+      
+      <hr>
+      <h1>Count button clicks</h1>
+      <button v-on:click="increase">Click Me</button>
+      <p>{{ counter }}</p>
+      
+      <hr>
+      <h1>Object's coordinates on mousemove</h1>
+      <p v-on:mousemove="updateCoordinates"> Coordinates:  {{ x }}/{{ y }}</p>
     </div>
   </body>
     <script>
@@ -18,12 +29,22 @@
         data: {
           title: "Hello World!",
           link: "http://google.com",
-          finishedLink: '<a href="http://google.com/">Google</a>'
+          finishedLink: '<a href="http://google.com/">Google</a>',
+          counter: 0,
+          x: 0,
+          y: 0
         },
         methods: {
           sayHello: function(){
             this.title = "Hello!";
             return this.title;
+          },
+          increase: function(){
+            this.counter++;
+          },
+          updateCoordinates: function(event){
+            this.x = event.clientX;
+            this.y = event.clientY;
           }
         }
       });
