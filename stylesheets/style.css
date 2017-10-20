@@ -6,14 +6,16 @@
   margin: 10px;
 }
 
-.red{
+.red, .MONSTER{
   background-color: red;
+  color: white;
 }
 
 .green{
   background-color: green;
 }
 
-.blue{
+.blue, .PLAYER{
   background-color: blue;
+  color: white;
 }

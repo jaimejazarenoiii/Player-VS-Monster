@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <title>Vue JS</title>
+    <script src="../javascripts/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <h1 v-once>{{ title  }}</h1>
+      <p>{{ sayHello() }} <a :href="link">Google</a></p>
+      
+      <hr>
+      <h1>Append complete HTML tag</h1>
+      <p v-html="finishedLink"></p>
+      
+      <hr>
+      <h1>Count button clicks</h1>
+      <button @click="counter++">Increase</button>
+      <button @click="counter--">Decrease</button>
+      <button @click="secondCounter++">Increase Second</button>
+      <p>{{ counter }} | {{ secondCounter }}</p>
+      <p>{{ result() }} | {{ output }}</p>
+
+      <hr>
+      <h1>Object's coordinates on mousemove</h1>
+      <p @mousemove="updateCoordinates"> Coordinates:  {{ x }}/{{ y }} -
+        <span @mousemove.stop="">DEAD SPOT</span></p>
+
+      <hr>
+      <h1>Keyboard events</h1>
+      <input type="text" @keyup.enter="alertMe" v-model="name"> 
+      <p>{{ name }}</p>
+    </div>
+  </body>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          title: "Hello World!",
+          link: "http://google.com",
+          finishedLink: '<a href="http://google.com/">Google</a>',
+          counter: 0,
+          x: 0,
+          y: 0,
+          name: "Max",
+          counter: 0,
+          secondCounter: 0,
+        },
+        computed: {
+          output: function(){
+            return this.counter > 5 ? 'Greater than 5' : 'Smaller than 5';
+          }
+        },
+        watch: {
+          counter: function(value){
+            var vm = this;
+            setTimeout(function(){
+              vm.counter = 0;
+            },2000)
+          }
+        },
+        methods: {
+          sayHello: function(){
+            this.title = "Hello!";
+            return this.title;
+          },
+          result: function(){
+            return this.counter > 5 ? 'Greater than 5' : 'Smaller than 5';
+          },
+          updateCoordinates: function(event){
+            this.x = event.clientX;
+            this.y = event.clientY;
+          },
+          alertMe: function(e){
+            alert(e.target.value);
+          }
+        }
+      });
+    </script>
+</html>

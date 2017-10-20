@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monster Slayer</title>
+    <script src="../javascripts/vue.js"></script>
+    <link rel="stylesheet" href="../stylesheets/foundation.min.css">
+    <link rel="stylesheet" href="../stylesheets/app.css">
+    <link rel="stylesheet" href="../stylesheets/style.css">
+</head>
+<body>
+<div id="app">
+    <section class="row">
+        <div class="small-6 columns">
+            <h1 class="text-center">YOU</h1>
+            <div class="healthbar">
+                <div class="healthbar text-center" :style="yourHealthStyle">
+                  <p>{{ yourHealth }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="small-6 columns">
+            <h1 class="text-center">MONSTER</h1>
+            <div class="healthbar">
+                <div class="healthbar text-center" :style="enemyHealthStyle">
+                  <p>{{ enemyHealth }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="row controls" v-if="!newGame">
+        <div class="small-12 columns">
+            <button id="start-game" @click="startGame()">START NEW GAME</button>
+        </div>
+    </section>
+    <template v-if="newGame">
+    <section class="row controls">
+        <div class="small-12 columns">
+            <button id="attack" @click="attack('normal', $event)">ATTACK</button>
+            <button id="special-attack" @click="attack('special', $event)">SPECIAL ATTACK</button>
+            <button id="heal" @click="heal()">HEAL</button>
+            <button id="give-up" @click="giveUp()">GIVE UP</button>
+        </div>
+    </section>
+    </template>
+    <template v-if="battleStart">
+    <section class="row log">
+        <div class="small-12 columns">
+            <ul>
+              <li v-for="logz in log">
+                <span v-for="value in logz" :class="[blue, logz.took_by]">{{ value  }}</span>
+              </li>
+            </ul>
+        </div>
+      </section>
+    </template>
+</div>
+</body>
+<script>
+  new Vue({
+    el: "#app",
+    data: {
+      enemyHealth: 100,
+      yourHealth: 100,
+      newGame: false,
+      battleStart: false,
+      log: [],
+      color: "blue"
+    },
+    computed: {
+      yourHealthStyle: function(){
+        return {
+          backgroundColor: 'green',
+          margin: 0,
+          color: 'white',
+          width: this.yourHealth + '%'
+        }
+      },
+      enemyHealthStyle: function(){
+        return {
+          backgroundColor: 'green',
+          margin: 0,
+          color: 'white',
+          width: this.enemyHealth + '%'
+        }
+      }
+    },
+    methods: {
+      startGame: function(){
+        this.newGame = !this.newGame;
+        this.yourHealth = 100;
+        this.enemyHealth = 100;
+      },
+      attack: function(type, event){
+        this.battleStart = true;
+        if(type == "normal"){
+          var dam = this.randomNumber(7, 5);
+          var dam2 = this.randomNumber(7, 5);
+          this.yourHealth -= dam;
+          this.enemyHealth -= dam2;
+          this.checkResult(dam2, dam);
+        }
+        else{
+          var dam = this.randomNumber(10, 7);
+          var dam2 = this.randomNumber(7, 5);
+          this.yourHealth -= dam2;
+          this.enemyHealth -= dam;
+          this.checkResult(dam, dam2);
+        }
+      },
+      checkResult: function(enemyDamage, yourDamage){
+        if(this.yourHealth <=0 && this.enemyHealth>=0){
+          alert("You Lose!");
+          this.newGame = !this.newGame;
+        }
+        else if(this.enemyHealth <=0 && this.yourHealth>=0){
+          alert("You Win!");
+          this.newGame = !this.newGame;
+        }
+        else if(this.enemyHealth <=0 && this.yourHealth <=0){
+          alert("Draw!");
+          this.newGame = !this.newGame;
+        }
+        else{
+          this.color = "red";
+          this.log.push(
+            {
+              took_by: "MONSTER",
+              damage: yourDamage,
+              damage_for: "PLAYER"
+            }
+          );
+          this.color = "blue";
+          this.log.push(
+            {
+              took_by: "PLAYER",
+              damage: enemyDamage,
+              damage_for: "MONSTER",
+            }
+          );
+        }
+      },
+      heal: function(){
+        var hp = this.randomNumber(10, 9);
+        var dam = this.randomNumber(7, 5);
+        if(this.yourHealth>=100){
+          this.yourHealth -= dam;
+          this.color = "blue";
+          this.log.push(
+            {
+              took_by: "PLAYER",
+              damage: hp,
+              damage_for: ""
+            }
+          )
+        }
+        else{
+          this.yourHealth = this.yourHealth + hp >= 100 ? 100 : this.yourHealth
+          + hp;
+          this.yourHealth -= dam;
+          this.color = "PLAYER";
+          this.log.push(
+            {
+              took_by: "PLAYER",
+              damage: hp,
+              damage_for: ""
+            }
+          )
+          this.color = "MONSTER";
+          this.log.push(
+            {
+              took_by: "MONSTER",
+              damage: dam,
+              damage_by: "PLAYER"
+            }
+          )
+        }
+      },
+      randomNumber: function(max, min){
+        return Math.floor(Math.random() * (max - min +1) + min);
+      },
+      giveUp: function(){
+        this.newGame = !this.newGame;
+        this.battleStart = !this.battleStart;
+        this.log.length = 0;
+      }
+    }
+  });
+</script>
+</html>

@@ -1,80 +1,89 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Vue JS</title>
+<head>
+    <title>Monster Slayer</title>
     <script src="../javascripts/vue.js"></script>
-  </head>
+    <link rel="stylesheet" href="../stylesheets/foundation.min.css">
+    <link rel="stylesheet" href="../stylesheets/app.css">
+</head>
+<body>
+<div id="app">
+    <section class="row">
+        <div class="small-6 columns">
+            <h1 class="text-center">YOU</h1>
+            <div class="healthbar">
+                <div class="healthbar text-center" :style="yourHealthStyle">
+                  <p>{{ yourHealth }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="small-6 columns">
+            <h1 class="text-center">MONSTER</h1>
+            <div class="healthbar">
+                <div class="healthbar text-center" :style="enemyHealthStyle">
+                  <p>{{ enemyHealth }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="row controls" v-if="!newGame">
+        <div class="small-12 columns">
+            <button id="start-game" @click="newGame = !newGame">START NEW GAME</button>
+        </div>
+    </section>
+    <template v-if="newGame">
+    <section class="row controls">
+        <div class="small-12 columns">
+            <button id="attack">ATTACK</button>
+            <button id="special-attack">SPECIAL ATTACK</button>
+            <button id="heal">HEAL</button>
+            <button id="give-up">GIVE UP</button>
+        </div>
+    </section>
+    </template>
+    <template v-if="battleStart">
+    <section class="row log">
+        <div class="small-12 columns">
+            <ul>
+                <li>
 
-  <body>
-    <div id="app">
-      <h1 v-once>{{ title  }}</h1>
-      <p>{{ sayHello() }} <a :href="link">Google</a></p>
-      
-      <hr>
-      <h1>Append complete HTML tag</h1>
-      <p v-html="finishedLink"></p>
-      
-      <hr>
-      <h1>Count button clicks</h1>
-      <button @click="counter++">Increase</button>
-      <button @click="counter--">Decrease</button>
-      <button @click="secondCounter++">Increase Second</button>
-      <p>{{ counter }} | {{ secondCounter }}</p>
-      <p>{{ result() }} | {{ output }}</p>
-
-      <hr>
-      <h1>Object's coordinates on mousemove</h1>
-      <p @mousemove="updateCoordinates"> Coordinates:  {{ x }}/{{ y }} -
-        <span @mousemove.stop="">DEAD SPOT</span></p>
-
-      <hr>
-      <h1>Keyboard events</h1>
-      <input type="text" @keyup.enter="alertMe" v-model="name"> 
-      <p>{{ name }}</p>
-    </div>
-  </body>
-    <script>
-      new Vue({
-        el: "#app",
-        data: {
-          title: "Hello World!",
-          link: "http://google.com",
-          finishedLink: '<a href="http://google.com/">Google</a>',
-          counter: 0,
-          x: 0,
-          y: 0,
-          name: "Max",
-          counter: 0,
-          secondCounter: 0,
-        },
-        computed: {
-          output: function(){
-            return this.counter > 5 ? 'Greater than 5' : 'Smaller than 5';
-          }
-        },
-        watch: {
-          counter: function(value){
-            var vm = this;
-            setTimeout(function(){
-              vm.counter = 0;
-            },2000)
-          }
-        },
-        methods: {
-          sayHello: function(){
-            this.title = "Hello!";
-            return this.title;
-          },
-          result: function(){
-            return this.counter > 5 ? 'Greater than 5' : 'Smaller than 5';
-          },
-          updateCoordinates: function(event){
-            this.x = event.clientX;
-            this.y = event.clientY;
-          },
-          alertMe: function(e){
-            alert(e.target.value);
-          }
+                </li>
+            </ul>
+        </div>
+      </section>
+    </template>
+</div>
+</body>
+<script>
+  new Vue({
+    el: "#app",
+    data: {
+      enemyHealth: 100,
+      yourHealth: 100,
+      newGame: false,
+      battleStart: false
+    },
+    computed: {
+      yourHealthStyle: function(){
+        return {
+          backgroundColor: 'green',
+          margin: 0,
+          color: 'white',
+          width: this.yourHealth + '%'
         }
-      });
-    </script>
+      },
+      enemyHealthStyle: function(){
+        return {
+          backgroundColor: 'green',
+          margin: 0,
+          color: 'white',
+          width: this.enemyHealth + '%'
+        }
+      }
+    },
+    methods: {
+    
+    }
+  });
+</script>
 </html>
